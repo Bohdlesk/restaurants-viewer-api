@@ -3,12 +3,12 @@ const config = require('#Config');
 
 const sequelizeConnection = new Sequilize(
   config.database || 'postgres',
-  config.dbUsername || 'postgres',
-  config.dbPassword,
+  config.username || 'postgres',
+  config.password,
   {
-    host: config.dbHost || 'localhost',
-    dialect: config.dbDialect || 'postgres',
-    port: config.dbPort || 5432,
+    host: config.host || 'localhost',
+    dialect: config.dialect || 'postgres',
+    port: config.port || 5432,
     pool: {
       max: 3,
       min: 0,
