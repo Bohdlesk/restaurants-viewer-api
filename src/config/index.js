@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/../../.env' });
 const env = process.env.NODE_ENV ? process.env.NODE_ENV.toLowerCase() : 'local';
 
 const config = {

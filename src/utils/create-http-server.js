@@ -1,3 +1,4 @@
+const { initModels } = require('./../db/models');
 const cors = require('cors');
 const express = require('express');
 const { errorMiddleware } = require('../middlewares/error-middleware');
@@ -6,15 +7,13 @@ const bodyParser = require('body-parser');
 const boolParser = require('express-query-boolean');
 const config = require('../config');
 
-function startHttpServer(expressApp) {
+async function startHttpServer(expressApp) {
   try {
     process.on('unhandledRejection', (reason, p) => {
-      console.error(JSON.stringify({ p, reason }));
+      console.error({ p, reason });
     });
 
-    process.on('uncaughtException', (error) =>
-      console.error(JSON.stringify(error))
-    );
+    process.on('uncaughtException', (error) => console.error(error));
     expressApp.use(express.json());
     expressApp.use(express.urlencoded({ extended: true }));
     expressApp.use(bodyParser.json());
@@ -27,6 +26,9 @@ function startHttpServer(expressApp) {
         credentials: true,
       })
     );
+
+    // connect to sequelize
+    await initModels(true);
 
     const env = 'DEV'; // TODO change env dynamically
     expressApp.get('/', async (req, res) => {
