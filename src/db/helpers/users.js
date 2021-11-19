@@ -65,6 +65,7 @@ async function create(user = {}) {
     const { User } = await initModels().catch(AppError.dbError);
 
     user.password = user.password && (await encrypt(user.password));
+    user.login = user.login && user.login.trim();
 
     const { dataValues } = await User.create(user).catch((error) => {
       if (
