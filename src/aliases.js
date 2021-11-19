@@ -7,6 +7,7 @@ moduleAlias.addAliases({
   '#Joi': `${__dirname}/middlewares/joi-validator-middleware`,
   '#dbModels': `${__dirname}/db/models`,
   '#dbHelpers': `${__dirname}/db/helpers`,
+  '#AuthMiddleware': `${__dirname}/middlewares/auth-middleware`,
 });
 
 moduleAlias();
