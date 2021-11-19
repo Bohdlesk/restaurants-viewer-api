@@ -5,7 +5,8 @@ moduleAlias.addAliases({
   '#Config': `${__dirname}/config`,
   '#handleErrorAsync': `${__dirname}/middlewares/error-middleware`,
   '#Joi': `${__dirname}/middlewares/joi-validator-middleware`,
-  '#db': `${__dirname}/db/models`,
+  '#dbModels': `${__dirname}/db/models`,
+  '#dbHelpers': `${__dirname}/db/helpers`,
 });
 
 moduleAlias();

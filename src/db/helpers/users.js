@@ -1,3 +1,7 @@
+import { encrypt } from '../../utils/encrypt';
+
+const { sequelizeErrCodes } = require('../../enums');
+
 const { createPageLimits } = require('../../utils/create-page-limits');
 const AppError = require('#AppError');
 const { initModels } = require('../models');
@@ -30,7 +34,6 @@ async function find(params = {}) {
 
     // findParams.status =
     //   status === 'all' ? ['active', 'inactive'] : status ? status : 'active';
-
     // if (search) {
     //   search = search.toString().trim().toLowerCase();
     //   findParams[Op.or] = [
@@ -57,6 +60,30 @@ async function find(params = {}) {
   }
 }
 
+async function create(user = {}) {
+  try {
+    const { User } = await initModels().catch(AppError.dbError);
+
+    user.password = user.password && (await encrypt(user.password));
+
+    const { dataValues } = await User.create(user).catch((error) => {
+      if (
+        get(error, 'original.code') === sequelizeErrCodes.uniqueConstraintError
+      ) {
+        return AppError.badRequestError({
+          code: AppError.errorCodes.loginAlreadyUsed,
+          message: AppError.errorMessages.loginAlreadyUsed,
+        });
+      }
+      return AppError.dbError(error);
+    });
+
+    return dataValues;
+  } catch (error) {
+    AppError.defaultInternalServerError(error);
+  }
+}
+
 module.exports = {
-  Review: { findById, find },
+  User: { findById, find, create },
 };

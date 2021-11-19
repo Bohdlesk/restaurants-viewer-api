@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx sequelize-cli db:migrate && node src/app.js"
+    "start": "npx sequelize-cli db:migrate && node -r esm src/app.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,7 @@
     "cors": "2.8.5",
     "crypto-js": "4.1.1",
     "dotenv": "10.0.0",
+    "esm": "3.2.25",
     "express": "^4.17.1",
     "express-query-boolean": "2.0.0",
     "glob": "^7.2.0",

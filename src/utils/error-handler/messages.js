@@ -11,6 +11,8 @@ const errorMessages = {
   ratingIsOutOfRange: 'Review rating out of range (0 -5)',
 
   notValidDataInRequest: 'Not valid data in request',
+
+  loginAlreadyUsed: 'User with this login is already exist',
 };
 
 module.exports = { errorMessages };
