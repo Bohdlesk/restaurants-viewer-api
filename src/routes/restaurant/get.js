@@ -3,9 +3,12 @@ const { Restaurant } = require('../../db/helpers');
 
 async function Handler(req, res) {
   try {
-    const { query } = req;
+    const { query: searchParams } = req;
 
-    const data = await Restaurant.find(query);
+    searchParams.includeReviewsCount = true;
+    searchParams.includeRatings = true;
+
+    const data = await Restaurant.find(searchParams);
 
     return res.status(200).send({ success: !!data, ...data });
   } catch (error) {

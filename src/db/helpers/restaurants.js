@@ -32,11 +32,24 @@
 //
 // module.exports = Restaurant;
 
+import { literal } from 'sequelize';
+
 const { createPageLimits } = require('../../utils/create-page-limits');
 const AppError = require('#AppError');
 const { initModels } = require('../models');
 const { get, map } = require('lodash');
 const { Op, fn, where, col } = require('sequelize');
+
+// Позволяет посчитать кол-во отзывов по ресторану
+const countReviewsSql = `SELECT COUNT(*)
+                             FROM reviews AS R
+                             WHERE R.restaurant_id = restaurants.id`;
+
+// Позволяет посчитать средний рейтинг отзывов по ресторану
+const countRatingsSql = `SELECT AVG(rating)
+                             FROM reviews AS R
+                             WHERE R.restaurant_id = restaurants.id
+                             GROUP BY R.restaurant_id`;
 
 async function create(restaurant = {}) {
   try {
@@ -59,7 +72,7 @@ async function create(restaurant = {}) {
   }
 }
 
-async function findById(id) {
+async function findById(id, params = {}) {
   try {
     if (!id)
       return AppError.badRequestError({
@@ -69,7 +82,21 @@ async function findById(id) {
 
     const { Restaurant } = await initModels().catch(AppError.dbError);
 
-    const data = await Restaurant.findByPk(id).catch(AppError.dbError);
+    const { includeRatings, includeReviewsCount } = params;
+
+    const includeAttributes = [];
+    if (includeRatings)
+      includeAttributes.push([literal(`(${countRatingsSql})`), 'rating']);
+
+    if (includeReviewsCount)
+      includeAttributes.push([literal(`(${countReviewsSql})`), 'reviews']);
+
+    const data = await Restaurant.findOne({
+      where: { id },
+      attributes: {
+        include: includeAttributes,
+      },
+    }).catch(AppError.dbError);
 
     return get(data, 'dataValues', null);
   } catch (error) {
@@ -81,7 +108,15 @@ async function find(params = {}) {
   try {
     const { Restaurant } = await initModels().catch(AppError.dbError);
 
-    let { search, page, perPage, status, ...findParams } = params;
+    let {
+      search,
+      page,
+      perPage,
+      status,
+      includeRatings,
+      includeReviewsCount,
+      ...findParams
+    } = params;
 
     findParams.status =
       status === 'all' ? ['active', 'inactive'] : status ? status : 'active';
@@ -98,7 +133,17 @@ async function find(params = {}) {
       ];
     }
 
+    const includeAttributes = [];
+    if (includeRatings)
+      includeAttributes.push([literal(`(${countRatingsSql})`), 'rating']);
+
+    if (includeReviewsCount)
+      includeAttributes.push([literal(`(${countReviewsSql})`), 'reviews']);
+
     let { rows: data, count: total } = await Restaurant.findAndCountAll({
+      attributes: {
+        include: includeAttributes,
+      },
       where: { ...findParams },
       ...createPageLimits({ page, perPage }),
     }).catch((error) => {
