@@ -67,6 +67,21 @@ const defaultInternalServerError = (error) => {
   });
 };
 
+const unauthorizedError = {
+  success: false,
+  code: errorCodes.jwtTokenUnauthorized,
+  status: errorStatus.unauthorized,
+  message: errorMessages.tokenNotAuthorized,
+};
+
+const authProcessError = (error) => {
+  throw new AppError({
+    code: error.code || errorCodes.errorDuringAuthHandling,
+    status: error.status || errorStatus.internalServerError,
+    message: error.message || JSON.stringify(error),
+  });
+};
+
 const errorModule = (module.exports = AppError);
 errorModule.errorCodes = errorCodes;
 errorModule.errorMessages = errorMessages;
@@ -74,3 +89,5 @@ errorModule.errorStatus = errorStatus;
 errorModule.dbError = dbError;
 errorModule.badRequestError = badRequestError;
 errorModule.defaultInternalServerError = defaultInternalServerError;
+errorModule.unauthorizedError = unauthorizedError;
+errorModule.authProcessError = authProcessError;

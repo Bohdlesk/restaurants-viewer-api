@@ -85,6 +85,28 @@ async function create(user = {}) {
   }
 }
 
+async function update(id, params = {}) {
+  try {
+    if (!id)
+      AppError.badRequestError({
+        message: AppError.errorMessages.missedRequiredParam,
+        code: AppError.errorCodes.missedRequiredParam,
+      });
+    const { User } = await initModels().catch(AppError.dbError);
+
+    const data = await User.update(params, {
+      where: { id },
+      returning: true,
+    }).catch((error) => {
+      AppError.dbError(error);
+    });
+
+    return get(data, '[1][0].dataValues');
+  } catch (error) {
+    AppError.defaultInternalServerError(error);
+  }
+}
+
 module.exports = {
-  User: { findById, find, create },
+  User: { findById, find, create, update },
 };

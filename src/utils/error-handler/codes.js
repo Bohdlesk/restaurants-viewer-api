@@ -11,6 +11,10 @@ const errorCodes = {
   loginAlreadyUsed: 7005,
 
   notExist: 6000,
+
+  jwtTokenUnauthorized: 9001,
+  jwtTokenNotProvided: 9002,
+  errorDuringAuthHandling: 9003,
 };
 
 module.exports = { errorCodes };

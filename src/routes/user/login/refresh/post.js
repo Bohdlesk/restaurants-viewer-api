@@ -1,12 +1,12 @@
-import { authenticateUser } from '../../../utils/jwt-auth';
+import { validateRefreshJwtToken } from '../../../../utils/jwt-auth';
 
 const AppError = require('#AppError');
 
 async function Handler(req, res) {
   try {
-    const { body } = req;
+    const { refreshToken } = req.body;
 
-    const freshTokens = await authenticateUser(body.login, body.password);
+    const freshTokens = await validateRefreshJwtToken(refreshToken);
     if (!freshTokens) return res.status(401).send({ status: 'unauthorized' });
 
     res.status(200).send({ status: 'authorized', ...freshTokens });

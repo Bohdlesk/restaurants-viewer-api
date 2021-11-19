@@ -13,6 +13,9 @@ const errorMessages = {
   notValidDataInRequest: 'Not valid data in request',
 
   loginAlreadyUsed: 'User with this login is already exist',
+
+  tokenNotAuthorized: 'Provided token is invalid',
+  jwtTokenIsNotProvided: 'JWT token is not provided',
 };
 
 module.exports = { errorMessages };
