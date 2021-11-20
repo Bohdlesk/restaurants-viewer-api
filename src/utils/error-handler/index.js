@@ -60,6 +60,7 @@ const badRequestError = (error) => {
 };
 
 const defaultInternalServerError = (error) => {
+  console.error(error);
   throw new AppError({
     code: error.code || AppError.errorCodes.default,
     status: error.status || AppError.errorStatus.internalServerError,
