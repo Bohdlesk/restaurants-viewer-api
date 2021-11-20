@@ -12,6 +12,15 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING(500),
         allowNull: true,
       },
+      temp: {
+        type: Sequelize.STRING(20),
+        allowNull: true,
+      },
+      humidify: {
+        type: Sequelize.STRING(20),
+        allowNull: true,
+      },
+      light: { type: Sequelize.STRING(20), allowNull: true },
       createdAt: {
         allowNull: true,
         type: Sequelize.DATE,
