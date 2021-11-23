@@ -13,6 +13,7 @@ const errorMessages = {
   notValidDataInRequest: 'Not valid data in request',
 
   loginAlreadyUsed: 'User with this login is already exist',
+  stationNotFound: 'Station not found',
 
   tokenNotAuthorized: 'Provided token is invalid',
   jwtTokenIsNotProvided: 'JWT token is not provided',

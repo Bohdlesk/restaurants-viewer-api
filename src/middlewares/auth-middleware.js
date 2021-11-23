@@ -11,7 +11,7 @@ function authMiddleware(req, res, next) {
     message: AppError.errorMessages.jwtTokenIsNotProvided,
   };
 
-  const authToken = get(req, 'headers.authtoken', null);
+  const authToken = get(req, 'headers.authorization', null);
 
   if (!authToken) {
     return res.status(401).send(noTokenError);

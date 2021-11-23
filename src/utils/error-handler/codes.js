@@ -9,6 +9,7 @@ const errorCodes = {
   restaurantNotExist: 7003,
   ratingIsOutOfRange: 7004,
   loginAlreadyUsed: 7005,
+  stationNotFound: 7006,
 
   notExist: 6000,
 

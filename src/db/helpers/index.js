@@ -3,4 +3,7 @@ module.exports = {
   ...require('./reviews'),
   ...require('./users'),
   ...require('./arduino'),
+  ...require('./station'),
+  ...require('./temperature'),
+  ...require('./humidity'),
 };

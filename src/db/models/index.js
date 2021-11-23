@@ -31,6 +31,15 @@ async function initModels(sync) {
     models.Restaurant.hasOne(models.User, { foreignKey: 'id' });
     models.Restaurant.belongsTo(models.User, { foreignKey: 'user_id' });
 
+    // station - user
+    models.Station.hasOne(models.User, { foreignKey: 'id' });
+    models.Station.belongsTo(models.User, { foreignKey: 'user_id' });
+
+    models.Temperature.hasOne(models.Station, { foreignKey: 'id' });
+    models.Temperature.belongsTo(models.Station, { foreignKey: 'station_id' });
+    models.Humidity.hasOne(models.Station, { foreignKey: 'id' });
+    models.Humidity.belongsTo(models.Station, { foreignKey: 'station_id' });
+
     // user - review
     models.Review.hasOne(models.User, { foreignKey: 'id' });
     models.Review.belongsTo(models.User, { foreignKey: 'user_id' });

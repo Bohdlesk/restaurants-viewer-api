@@ -62,6 +62,7 @@ async function authenticateUser(login, pass) {
     const freshTokens = createAuthTokens({
       id: userData.id,
       login,
+      isAdmin: userData.is_admin,
     });
 
     await User.update(userData.id, {
@@ -77,10 +78,10 @@ async function authenticateUser(login, pass) {
 function createAuthTokens(tokenBody) {
   try {
     const jwtToken = jwt.sign(tokenBody, jwtTokenSecretKey, {
-      expiresIn: '15m',
+      expiresIn: '10d',
     });
     const jwtRefreshToken = jwt.sign(tokenBody, jwtTokenSecretKey, {
-      expiresIn: '2d',
+      expiresIn: '20d',
     });
 
     return {

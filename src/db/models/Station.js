@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define(
-    'users',
+    'stations',
     {
       id: {
         type: Sequelize.INTEGER,
@@ -9,33 +9,27 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
       },
       name: {
-        type: Sequelize.STRING(60),
+        type: Sequelize.STRING(100),
         allowNull: true,
       },
-      status: {
-        type: Sequelize.ENUM,
-        values: ['active', 'inactive', 'deleted'],
-        defaultValue: 'active',
-        allowNull: false,
-      },
-      login: {
-        type: Sequelize.STRING(50),
+      sid: {
+        type: Sequelize.STRING(100),
         allowNull: true,
         unique: true,
       },
-      password: {
-        type: Sequelize.STRING(300),
+      user_id: {
+        type: Sequelize.INTEGER,
+        onDelete: 'set null',
         allowNull: true,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
       },
-      email: { type: Sequelize.STRING, allowNull: true },
-      phone: { type: Sequelize.STRING, allowNull: true },
-      refresh_token: {
-        type: Sequelize.STRING,
+      last_connection: {
         allowNull: true,
-      },
-      is_admin: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        type: Sequelize.DATE,
+        defaultValue: null,
       },
       createdAt: {
         allowNull: true,
@@ -53,7 +47,7 @@ module.exports = (sequelize, Sequelize) => {
       collate: 'utf8_general_ci',
       freezeTableName: true,
       timestamps: true,
-      tablename: 'users',
+      tablename: 'stations',
     }
   );
 };
