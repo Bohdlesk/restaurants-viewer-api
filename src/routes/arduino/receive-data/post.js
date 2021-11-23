@@ -23,15 +23,17 @@ async function Handler(req, res) {
 
     const { temperature, humidity, data: additionalData } = body;
 
-    Temperature.create({
-      data: temperature,
-      station_id,
-    });
+    if (temperature)
+      Temperature.create({
+        data: temperature,
+        station_id,
+      });
 
-    Humidity.create({
-      data: humidity,
-      station_id,
-    });
+    if (humidity)
+      Humidity.create({
+        data: humidity,
+        station_id,
+      });
 
     return res.status(200).send({ success: true });
   } catch (error) {
