@@ -59,11 +59,14 @@ async function findLastTwoValues(stationId) {
   }
 }
 
-async function findLatestValue() {
+async function findLatestValue(stationId) {
   try {
     const { Temperature } = await initModels().catch(AppError.dbError);
 
     let data = await Temperature.findAll({
+      where: {
+        station_id: stationId,
+      },
       attributes: ['id', 'data', 'received'],
       limit: 1,
       order: [['id', 'desc']],

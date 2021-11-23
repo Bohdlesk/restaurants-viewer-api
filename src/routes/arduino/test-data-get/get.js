@@ -4,8 +4,9 @@ const AppError = require('#AppError');
 
 async function Handler(req, res) {
   try {
-    const temperature = await Temperature.findLatestValue();
-    const humidity = await Humidity.findLatestValue();
+    const { query } = req;
+    const temperature = await Temperature.findLatestValue(query.stationId);
+    const humidity = await Humidity.findLatestValue(query.stationId);
 
     return res.status(200).send({
       data: {

@@ -60,11 +60,14 @@ async function findLastTwoValues(stationId) {
   }
 }
 
-async function findLatestValue() {
+async function findLatestValue(stationId) {
   try {
     const { Humidity } = await initModels().catch(AppError.dbError);
 
     let data = await Humidity.findAll({
+      where: {
+        station_id: stationId,
+      },
       attributes: ['id', 'data', 'received'],
       limit: 1,
       order: [['id', 'desc']],
