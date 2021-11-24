@@ -15,7 +15,14 @@ async function Handler(req, res) {
     }
     const station = data[0];
 
-    const { id: station_id } = station;
+    const { id: station_id, receive_data } = station;
+
+    if (!receive_data) {
+      return res.status(200).send({
+        success: false,
+        message: 'Station data receive if disabled now',
+      });
+    }
 
     Station.update(station_id, {
       last_connection: moment.utc().format(),
