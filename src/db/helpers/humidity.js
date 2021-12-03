@@ -1,6 +1,7 @@
 const AppError = require('#AppError');
 const { initModels } = require('../models');
 const { map } = require('lodash');
+const { Op } = require('sequelize');
 
 const moment = require('moment');
 
@@ -82,9 +83,46 @@ async function findLatestValue(stationId) {
   }
 }
 
+async function getDataForPlots(params = {}) {
+  try {
+    const { Humidity } = await initModels().catch(AppError.dbError);
+
+    let data = await Humidity.findAll({
+      where: {
+        [Op.and]: [
+          {
+            received: {
+              [Op.gte]: params.dateFrom
+                ? moment.utc(params.dateFrom).format()
+                : moment.utc().subtract(1, 'isoWeek').format(),
+            },
+          },
+          {
+            received: {
+              [Op.lte]: params.dateTo
+                ? moment.utc(params.dateTo).format()
+                : moment.utc().format(),
+            },
+          },
+        ],
+      },
+      attributes: ['id', 'data', 'received'],
+      order: [['id', 'asc']],
+    }).catch((error) => {
+      AppError.dbError(error);
+    });
+    data = map(data, 'dataValues');
+
+    return data.length ? data : {};
+  } catch (error) {
+    AppError.defaultInternalServerError(error);
+  }
+}
+
 module.exports = {
   Humidity: {
     create,
     findLatestValue,
+    getDataForPlots,
   },
 };

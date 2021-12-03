@@ -1,6 +1,7 @@
 const AppError = require('#AppError');
 const { initModels } = require('../models');
 const { map } = require('lodash');
+const { Op } = require('sequelize');
 const moment = require('moment');
 
 async function create(data = {}) {
@@ -81,9 +82,46 @@ async function findLatestValue(stationId) {
   }
 }
 
+async function getDataForPlots(params = {}) {
+  try {
+    const { Temperature } = await initModels().catch(AppError.dbError);
+
+    let data = await Temperature.findAll({
+      where: {
+        [Op.and]: [
+          {
+            received: {
+              [Op.gte]: params.dateFrom
+                ? moment.utc(params.dateFrom).format()
+                : moment.utc().subtract(1, 'isoWeek').format(),
+            },
+          },
+          {
+            received: {
+              [Op.lte]: params.dateTo
+                ? moment.utc(params.dateTo).format()
+                : moment.utc().format(),
+            },
+          },
+        ],
+      },
+      attributes: ['id', 'data', 'received'],
+      order: [['id', 'asc']],
+    }).catch((error) => {
+      AppError.dbError(error);
+    });
+    data = map(data, 'dataValues');
+
+    return data.length ? data : {};
+  } catch (error) {
+    AppError.defaultInternalServerError(error);
+  }
+}
+
 module.exports = {
   Temperature: {
     create,
     findLatestValue,
+    getDataForPlots,
   },
 };

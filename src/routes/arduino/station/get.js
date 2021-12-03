@@ -6,7 +6,7 @@ async function Handler(req, res) {
   try {
     const { query: searchParams, user } = req;
 
-    searchParams.user_id = user.admin ? undefined : user.id;
+    searchParams.user_id = user.isAdmin ? undefined : user.id;
 
     const data = await Station.find(searchParams);
 
