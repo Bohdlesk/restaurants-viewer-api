@@ -30,13 +30,23 @@ async function Handler(req, res) {
 
     const { temperature, humidity, data: additionalData } = body;
 
-    if (temperature && !Number.isNaN(temperature))
+    if (
+      temperature &&
+      !Number.isNaN(temperature) &&
+      temperature !== 'NaN' &&
+      temperature !== 'NAN'
+    )
       Temperature.create({
         data: temperature,
         station_id,
       });
 
-    if (humidity && !Number.isNaN(humidity))
+    if (
+      humidity &&
+      !Number.isNaN(humidity) &&
+      humidity !== 'NaN' &&
+      humidity !== 'NAN'
+    )
       Humidity.create({
         data: humidity,
         station_id,
