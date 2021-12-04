@@ -30,6 +30,9 @@ async function Handler(req, res) {
 
     const { temperature, humidity, data: additionalData } = body;
 
+    console.log('Request body ------');
+    console.log(body);
+
     if (
       temperature &&
       !Number.isNaN(temperature) &&
