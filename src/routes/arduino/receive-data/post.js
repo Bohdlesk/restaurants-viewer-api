@@ -37,7 +37,7 @@ async function Handler(req, res) {
       temperature &&
       !Number.isNaN(temperature) &&
       temperature !== 'NaN' &&
-      temperature !== 'NAN'
+      temperature !== ' NAN'
     )
       Temperature.create({
         data: temperature,
@@ -48,7 +48,7 @@ async function Handler(req, res) {
       humidity &&
       !Number.isNaN(humidity) &&
       humidity !== 'NaN' &&
-      humidity !== 'NAN'
+      humidity !== ' NAN'
     )
       Humidity.create({
         data: humidity,
